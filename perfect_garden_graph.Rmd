@@ -35,34 +35,48 @@ FYI, Prof. Lisa just added 2021 data to the `gardenR` package. If you want to us
 
 ## Graph Week 1
 
-Question I hope to answer: (write your description here - 1-2 sentences should be plenty)
+Question I hope to answer: 
 
 *Which variety of lettuce gave the most yield in pounds over the time period?* 
 
 ```{r}
-garden_harvest %>% 
+  garden_harvest %>% 
   filter(vegetable %in% c("lettuce")) %>% 
   mutate(weight_lbs = weight*0.00220462)%>% 
   group_by(variety,date) %>% 
   summarize(sum_weight = sum(weight_lbs)) %>% 
   mutate(cum_sum_weight = cumsum(sum_weight)) %>% 
-  ggplot(aes(x=date,y=cum_sum_weight,color = variety))+
-  geom_line()+
-  labs(y="Cumulative harvest")
-  
+  ggplot(aes(x=date, y = cum_sum_weight, color = variety))+
+  geom_line()
+
   
 
 
 ```
 
-Instructor's feedback: (copy the feedback from moodle here)
+Instructor's feedback: 	Good start. Add a title that captures what's on the x and y axes and omit those axis labels. Use a str_XXX() function to capitalize the first initial of each variety. Remove the vertical grid lines using theme().
+
 
 ## Graph Week 2
 
-Question I hope to answer: (probably the same as previous week but may change slightly)
+Question I hope to answer: *What is the total amount of each variety of tomatoes collected on each day of the week?* 
 
-```{r}
-
+```{r, fig.alt = "Bar graph showing total harvest of each tomato variety in pounds by day of week. For Better Boy, Jet Star and Old German, there was one certain day each variety was not collected at all" }
+garden_harvest %>% 
+  filter(vegetable %in% c("tomatoes")) %>% 
+  mutate(weight_lbs = weight*0.00220462,, day_of_week = wday(date, label = TRUE, abbr = TRUE))%>% 
+  group_by(variety,day_of_week) %>% 
+  summarize(total_weight_lbs = sum(weight_lbs)) %>% 
+  mutate(variety2 = str_to_title(variety)) %>% 
+  ggplot(aes(x = total_weight_lbs, y= fct_rev(fct_relevel(day_of_week, "Mon","Tue","Wed","Thu","Fri","Sat","Sun" ))))+
+  geom_col()+
+  facet_wrap(vars(variety2))+ 
+  labs(y="",
+       x="",
+       title = "Total Harvest of Each Tomato Variety in Pounds According To Day of Week")+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+  
 ```
 
 Instructor's feedback: (copy the feedback from moodle here)
