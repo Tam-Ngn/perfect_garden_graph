@@ -22,6 +22,9 @@ library(lubridate)         # for working with dates
 # Once the library is installed, you don't need to install it again, but each time you need to load the library using the code below. You will know if you haven't installed the library if the code below produces an error.
 library(gardenR)
 # theme_set(theme_minimal())  # set a theme if desired
+library(ggthemes)
+remotes::install_github("AllanCameron/geomtextpath")
+library(geomtextpath)
 ```
 
 ```{r data}
@@ -74,39 +77,99 @@ garden_harvest %>%
   labs(y="",
        x="",
        title = "Total Harvest of Each Tomato Variety in Pounds According To Day of Week")+
-  theme(panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank())
+  theme(panel.grid.major.y = element_blank(), 
+        panel.grid.minor.y = element_blank())
   
 ```
 
-Instructor's feedback: (copy the feedback from moodle here)
+Instructor's feedback: 	
+Ok - you've created a completely different graph. That's ok, but from now on, you'll work on the same graph until the end. Order the varieties from most to least total harvest weight. Use scale_x_continuous(expand = c(0,0)) to move the y-axis labels right next to the bars.
 
 ## Graph Week 3
 
-Question I hope to answer: (probably the same as previous week but may change slightly)
+*Sorry I created two completely different plots. From now on I'll be using the line graph I created for week 1*
 
-```{r}
+Question I hope to answer: *Which variety of lettuce gave the most yield in pounds over the time period?* 
 
+```{r, fig.alt = "Line graph showing cumulative harvest of each lettuce varieties. Lisa appeared to collect Lettuce Mixture variety the most", fig.width = 9, fig.height = 4}
+  garden_harvest %>% 
+  filter(vegetable %in% c("lettuce")) %>% 
+  mutate(weight_lbs = weight*0.00220462)%>% 
+  group_by(variety,date) %>% 
+  summarize(sum_weight = sum(weight_lbs)) %>% 
+  mutate(cum_sum_weight = cumsum(sum_weight)) %>% 
+  ggplot(aes(x=date, y = cum_sum_weight, color = str_to_title(variety)))+
+  geom_line()+
+  labs(title = "Cumulative Weight in pounds for Lettuce Varieties",
+       x = "",
+       y = "",
+       color = "Variety",
+       caption = "Line graph by Tam Nguyen")+
+  theme(plot.title = element_text(hjust = 0.5),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank())+
+  theme_economist() 
 ```
 
-Instructor's feedback: (copy the feedback from moodle here)
+Instructor's feedback: 	
+This looks great! Make sure to stick with this one for the last one you submit. Omit the legend and instead directly label each line - see the shared google doc on the moodle page for some resources.
 
 ## Graph Week 4
 
-Question I hope to answer: (probably the same as previous week but may change slightly)
+Question I hope to answer: *Which variety of lettuce gave the most yield in pounds over the time period?* 
 
-```{r}
 
+```{r, fig.alt = "Line graph showing cumulative harvest of each lettuce varieties. Lisa appeared to collect Lettuce Mixture variety the most", fig.width = 9, fig.height = 4}
+  garden_harvest %>% 
+  filter(vegetable %in% c("lettuce")) %>% 
+  mutate(weight_lbs = weight*0.00220462)%>% 
+  group_by(variety,date) %>% 
+  summarize(sum_weight = sum(weight_lbs)) %>% 
+  mutate(cum_sum_weight = cumsum(sum_weight), variety2 = str_to_title(variety)) %>% 
+  ggplot(aes(x=date, y = cum_sum_weight, color = variety2))+
+  geom_line()+
+  geom_textline(aes(label = variety2), size = 3, vjust = -0.5)+
+  labs(title = "Cumulative Weight in pounds for Lettuce Varieties",
+       subtitle = "The graph below shows different lettuce varieties Lisa planted and harvested in her garden",
+       x = "",
+       y = "",
+       caption = "Source: Data by Lisa Lendway, line graph by Tam Nguyen")+
+  theme_economist() +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        legend.position = "none")
 ```
 
-Instructor's feedback: (copy the feedback from moodle here)
+Instructor's feedback: Looks great! Submit as is!
 
 ## Graph Week 5
 
-Question I hope to answer: (probably the same as previous week but may change slightly)
+Question I hope to answer: *Which variety of lettuce gave the most yield in pounds over the time period?* 
 
-```{r}
 
+```{r, fig.alt = "Line graph showing cumulative harvest of each lettuce variety. Lisa appeared to collect Lettuce Mixture variety the most", fig.width = 9, fig.height = 4}
+  garden_harvest %>% 
+  filter(vegetable %in% c("lettuce")) %>% 
+  mutate(weight_lbs = weight*0.00220462)%>% 
+  group_by(variety,date) %>% 
+  summarize(sum_weight = sum(weight_lbs)) %>% 
+  mutate(cum_sum_weight = cumsum(sum_weight), variety2 = str_to_title(variety)) %>% 
+  ggplot(aes(x=date, y = cum_sum_weight, color = variety2))+
+  geom_line()+
+  geom_textline(aes(label = variety2), size = 3, vjust = -0.5)+
+  labs(title = "Cumulative Weight in pounds for Lettuce Varieties",
+       subtitle = "The graph below shows different lettuce varieties Lisa planted and harvested in her garden",
+       x = "",
+       y = "",
+       caption = "Source: Data by Lisa Lendway, line graph by Tam Nguyen")+
+  theme_economist() +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        legend.position = "none")
 ```
 
 Instructor's feedback: (copy the feedback from moodle here)
